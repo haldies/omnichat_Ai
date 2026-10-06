@@ -1,0 +1,41 @@
+﻿═══════════════════════════════════════════════════════════════
+                    OMNICHAT - ADMIN ACCOUNTS
+═══════════════════════════════════════════════════════════════
+
+🏢 BUSINESS 1: PT Teknologi Maju (Enterprise)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 Admin:    admin@teknologimaju.com     / admin123
+👤 Manager:  manager@teknologimaju.com   / admin123
+👤 Agent 1:  agent1@teknologimaju.com    / admin123
+👤 Agent 2:  agent2@teknologimaju.com    / admin123
+👤 Agent 3:  agent3@teknologimaju.com    / admin123
+
+🏢 BUSINESS 2: CV Digital Solusi (Professional)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 Admin:    admin@digitalsolusi.com     / admin123
+👤 Agent:    agent@digitalsolusi.com     / admin123
+
+🏢 BUSINESS 3: Startup Inovasi (Trial)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👤 Admin:    admin@startupinovasi.com    / admin123
+
+═══════════════════════════════════════════════════════════════
+                        QUICK REFERENCE
+═══════════════════════════════════════════════════════════════
+
+🔑 Default Password: admin123 (untuk semua akun)
+
+🌐 Login URL: http://localhost:4028/login
+
+📝 Roles:
+   • ADMIN    - Full access + team management
+   • MANAGER  - Team management + analytics
+    AGENT    - Handle conversations
+    VIEWER   - Read-only access
+
+ Multi-Tenancy:
+    Data terpisah per business
+    Integration terpisah per business
+    AI knowledge base terpisah per business
+
+

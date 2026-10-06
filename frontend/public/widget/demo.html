@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniChat Widget Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #111827;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .feature-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .cta-button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .demo-info {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .demo-info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .demo-info-text {
+            font-size: 13px;
+            color: #78350f;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 OmniChat Widget Demo</h1>
+        <p class="subtitle">Experience our live chat widget in action</p>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <div class="feature-title">Real-time Chat</div>
+                <div class="feature-desc">Instant messaging with your customers</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">Customizable</div>
+                <div class="feature-desc">Match your brand colors and style</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">Mobile Ready</div>
+                <div class="feature-desc">Works perfectly on all devices</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-title">Auto-Reply</div>
+                <div class="feature-desc">Automated responses for common questions</div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <div class="cta-title">Try it now!</div>
+            <div class="cta-text">Click the chat button in the bottom right corner to start a conversation</div>
+            <button class="cta-button" onclick="openChat()">Open Chat Widget</button>
+        </div>
+
+        <div class="demo-info">
+            <div class="demo-info-title">📌 Demo Mode</div>
+            <div class="demo-info-text">
+                This is a demo page. The widget is configured with default settings.
+                You can customize colors, position, messages, and more!
+            </div>
+        </div>
+    </div>
+
+ <!-- OmniChat Widget -->
+<script>
+  (function() {
+    window.OmniChatConfig = {
+      widgetId: 'widget-1766559042108-tt3nx84dg',
+      apiKey: 'wgt_1766559042108_eot9g0cbvto',
+      apiUrl: 'http://localhost:3001',
+      primaryColor: '#3b82f6',
+      position: 'bottom-right',
+      greetingMessage: 'Hi! How can we help you today?',
+      welcomeMessage: 'Welcome! Were here to help.',
+      offlineMessage: 'We are currently offline. Leave us a message!',
+      showAgentAvatar: true,
+      enableFileUpload: true,
+      enableEmoji: true,
+      soundEnabled: true
+    };
+    
+    var script = document.createElement('script');
+    script.src = 'http://localhost:3001/widget/omnichat-widget.js';
+    script.async = true;
+    document.head.appendChild(script);
+  })();
+
+  // Function to open chat widget
+  function openChat() {
+    setTimeout(function() {
+      var button = document.getElementById('omnichat-button');
+      if (button) {
+        button.click();
+      }
+    }, 500);
+  }
+</script>
+<!-- End OmniChat Widget -->
+</body>
+</html>

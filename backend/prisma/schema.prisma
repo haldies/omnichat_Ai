@@ -1,0 +1,402 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Enums
+enum IntegrationStatus {
+  ACTIVE
+  INACTIVE
+  ERROR
+  PENDING
+}
+
+enum Platform {
+  TELEGRAM
+  WHATSAPP
+  DISCORD
+  SLACK
+  INSTAGRAM
+  FACEBOOK
+  WEBSITE
+}
+
+enum MessageType {
+  TEXT
+  PHOTO
+  VIDEO
+  AUDIO
+  VOICE
+  DOCUMENT
+  STICKER
+  LOCATION
+  CONTACT
+  OTHER
+}
+
+enum MessageDirection {
+  INCOMING
+  OUTGOING
+}
+
+enum ChatType {
+  PRIVATE
+  GROUP
+  SUPERGROUP
+  CHANNEL
+}
+
+enum AiStatus {
+  ACTIVE
+  HANDOVER
+}
+
+enum ConversationStatus {
+  ACTIVE
+  ARCHIVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum LogLevel {
+  ERROR
+  WARN
+  INFO
+  DEBUG
+}
+
+// Main Models
+model Integration {
+  id          String            @id @default(cuid())
+  businessId  String            @map("business_id")
+  name        String
+  platform    Platform
+  description String?
+  config      Json              @default("{}")
+  status      IntegrationStatus @default(INACTIVE)
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  // Relations
+  business            Business             @relation("BusinessIntegrations", fields: [businessId], references: [id], onDelete: Cascade)
+  conversationThreads ConversationThread[]
+  messageAnalytics    MessageAnalytics[]
+  apiUsageLogs        ApiUsageLog[]
+
+  @@index([businessId])
+  @@map("integrations")
+}
+
+model TelegramChat {
+  id                    String    @id @default(cuid())
+  chatId                BigInt    @unique @map("chat_id")
+  chatType              ChatType  @map("chat_type")
+  aiStatus              AiStatus  @default(ACTIVE) @map("ai_status")
+  title                 String?
+  username              String?
+  firstName             String?   @map("first_name")
+  lastName              String?   @map("last_name")
+  description           String?
+  inviteLink            String?   @map("invite_link")
+  pinnedMessageId       BigInt?   @map("pinned_message_id")
+  permissions           Json?
+  slowModeDelay         Int?      @map("slow_mode_delay")
+  messageAutoDeleteTime Int?      @map("message_auto_delete_time")
+  hasProtectedContent   Boolean   @default(false) @map("has_protected_content")
+  stickerSetName        String?   @map("sticker_set_name")
+  canSetStickerSet      Boolean   @default(false) @map("can_set_sticker_set")
+  linkedChatId          BigInt?   @map("linked_chat_id")
+  location              Json?
+  lastMessageAt         DateTime? @map("last_message_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  messages TelegramMessage[]
+
+  @@map("telegram_chats")
+}
+
+model TelegramMessage {
+  id                   String           @id @default(cuid())
+  chatId               BigInt           @map("chat_id")
+  telegramMessageId    BigInt           @map("telegram_message_id")
+  messageText          String?          @map("message_text")
+  messageType          MessageType      @default(TEXT) @map("message_type")
+  messageDirection     MessageDirection @default(INCOMING) @map("message_direction")
+  messageData          Json?            @map("message_data")
+  userId               BigInt?          @map("user_id")
+  username             String?
+  firstName            String?          @map("first_name")
+  lastName             String?          @map("last_name")
+  replyToMessageId     BigInt?          @map("reply_to_message_id")
+  forwardFromChatId    BigInt?          @map("forward_from_chat_id")
+  forwardFromMessageId BigInt?          @map("forward_from_message_id")
+  editDate             DateTime?        @map("edit_date")
+  mediaGroupId         String?          @map("media_group_id")
+  hasMediaSpoiler      Boolean          @default(false) @map("has_media_spoiler")
+  createdAt            DateTime         @default(now()) @map("created_at")
+  updatedAt            DateTime         @updatedAt @map("updated_at")
+
+  // Relations
+  chat TelegramChat @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+
+  @@unique([telegramMessageId, chatId])
+  @@map("telegram_messages")
+}
+
+model WhatsAppChat {
+  id            String    @id @default(cuid())
+  chatId        String    @unique @map("chat_id")
+  phoneNumber   String?   @map("phone_number")
+  displayName   String?   @map("display_name")
+  profileName   String?   @map("profile_name")
+  chatType      ChatType  @default(PRIVATE) @map("chat_type")
+  lastMessageAt DateTime? @map("last_message_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  messages WhatsAppMessage[]
+
+  @@map("whatsapp_chats")
+}
+
+model WhatsAppMessage {
+  id                String           @id @default(cuid())
+  chatId            String           @map("chat_id")
+  whatsappMessageId String           @unique @map("whatsapp_message_id")
+  messageText       String?          @map("message_text")
+  messageType       MessageType      @default(TEXT) @map("message_type")
+  messageDirection  MessageDirection @default(INCOMING) @map("message_direction")
+  messageData       Json?            @map("message_data")
+  phoneNumber       String?          @map("phone_number")
+  displayName       String?          @map("display_name")
+  timestamp         BigInt?
+  status            String?          @default("sent")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  // Relations
+  chat WhatsAppChat @relation(fields: [chatId], references: [chatId], onDelete: Cascade)
+
+  @@map("whatsapp_messages")
+}
+
+model ConversationThread {
+  id               String             @id @default(cuid())
+  integrationId    String             @map("integration_id")
+  externalThreadId String?            @map("external_thread_id")
+  externalChatId   String?            @map("external_chat_id")
+  platform         Platform
+  customerName     String?            @map("customer_name")
+  customerEmail    String?            @map("customer_email")
+  customerPhone    String?            @map("customer_phone")
+  threadTitle      String?            @map("thread_title")
+  lastMessage      String?            @map("last_message")
+  participantCount Int                @default(1) @map("participant_count")
+  status           ConversationStatus @default(ACTIVE)
+  tags             String[]
+  assignedAgentId  String?            @map("assigned_agent_id")
+  priority         Priority           @default(NORMAL)
+  lastActivityAt   DateTime           @default(now()) @map("last_activity_at")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+
+  // Relations
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  assignedAgent User?       @relation("AssignedAgent", fields: [assignedAgentId], references: [id], onDelete: SetNull)
+  messages      Message[]
+
+  @@unique([integrationId, externalThreadId])
+  @@map("conversation_threads")
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  READ
+  FAILED
+}
+
+model Message {
+  id           String           @id @default(cuid())
+  threadId     String           @map("thread_id")
+  content      String
+  direction    MessageDirection
+  messageType  MessageType      @default(TEXT) @map("message_type")
+  status       MessageStatus    @default(SENT)
+  senderName   String?          @map("sender_name")
+  senderAvatar String?          @map("sender_avatar")
+  metadata     Json?
+  attachments  Json[]           @default([])
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+
+  // Relations
+  thread ConversationThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([threadId])
+  @@map("messages")
+}
+
+model MessageAnalytics {
+  id               String   @id @default(cuid())
+  integrationId    String   @map("integration_id")
+  platform         Platform
+  date             DateTime @db.Date
+  totalMessages    Int      @default(0) @map("total_messages")
+  incomingMessages Int      @default(0) @map("incoming_messages")
+  outgoingMessages Int      @default(0) @map("outgoing_messages")
+  uniqueChats      Int      @default(0) @map("unique_chats")
+  responseTimeAvg  Int?     @map("response_time_avg") // in milliseconds
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  // Relations
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@unique([integrationId, platform, date])
+  @@map("message_analytics")
+}
+
+model WebhookLog {
+  id             String   @id @default(cuid())
+  platform       Platform
+  webhookUrl     String?  @map("webhook_url")
+  requestMethod  String   @map("request_method")
+  requestHeaders Json?    @map("request_headers")
+  requestBody    Json?    @map("request_body")
+  responseStatus Int?     @map("response_status")
+  responseBody   Json?    @map("response_body")
+  processingTime Int?     @map("processing_time_ms") // in milliseconds
+  errorMessage   String?  @map("error_message")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("webhook_logs")
+}
+
+model ApiUsageLog {
+  id            String   @id @default(cuid())
+  integrationId String   @map("integration_id")
+  platform      Platform
+  endpoint      String
+  method        String
+  requestData   Json?    @map("request_data")
+  responseData  Json?    @map("response_data")
+  statusCode    Int?     @map("status_code")
+  responseTime  Int?     @map("response_time_ms") // in milliseconds
+  errorMessage  String?  @map("error_message")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@map("api_usage_logs")
+}
+
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     LogLevel
+  message   String
+  meta      Json?
+  timestamp DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("system_logs")
+}
+
+// User management
+enum UserRole {
+  ADMIN
+  MANAGER
+  AGENT
+  VIEWER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum BusinessStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  TRIAL
+}
+
+model Business {
+  id                 String         @id @default(cuid())
+  name               String
+  email              String?
+  phone              String?
+  address            String?
+  logo               String?
+  website            String?
+  status             BusinessStatus @default(ACTIVE)
+  subscriptionPlan   String?        @map("subscription_plan")
+  subscriptionExpiry DateTime?      @map("subscription_expiry")
+  maxUsers           Int            @default(10) @map("max_users")
+  maxIntegrations    Int            @default(5) @map("max_integrations")
+  settings           Json?          @default("{}")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+
+  // Relations
+  users        User[]
+  integrations Integration[] @relation("BusinessIntegrations")
+
+  @@map("businesses")
+}
+
+model User {
+  id         String     @id @default(cuid())
+  businessId String     @map("business_id")
+  email      String     @unique
+  password   String
+  name       String
+  avatar     String?
+  role       UserRole   @default(AGENT)
+  status     UserStatus @default(ACTIVE)
+  lastLogin  DateTime?  @map("last_login")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  // Relations
+  business              Business             @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  assignedConversations ConversationThread[] @relation("AssignedAgent")
+
+  @@index([businessId])
+  @@map("users")
+}
+
+// API Keys for authentication
+model ApiKey {
+  id          String    @id @default(cuid())
+  name        String
+  key         String    @unique
+  permissions Json      @default("[]")
+  lastUsedAt  DateTime? @map("last_used_at")
+  expiresAt   DateTime? @map("expires_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("api_keys")
+}

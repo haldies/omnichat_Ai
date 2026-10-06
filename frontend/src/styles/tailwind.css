@@ -1,0 +1,225 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Display:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #1E40AF; /* blue-800 - Command authority */
+    --color-primary-foreground: #FFFFFF; /* white - High contrast */
+    
+    /* Secondary Colors */
+    --color-secondary: #0F172A; /* slate-900 - Operational depth */
+    --color-secondary-foreground: #F8FAFC; /* slate-50 - Light contrast */
+    
+    /* Accent Colors */
+    --color-accent: #F59E0B; /* amber-500 - AI intelligence indicators */
+    --color-accent-foreground: #0F172A; /* slate-900 - Dark contrast */
+    
+    /* Background Colors */
+    --color-background: #F8FAFC; /* slate-50 - Clean workspace */
+    --color-foreground: #0F172A; /* slate-900 - Clear communication */
+    
+    /* Surface Colors */
+    --color-card: #FFFFFF; /* white - Card surfaces */
+    --color-card-foreground: #0F172A; /* slate-900 - Card text */
+    --color-popover: #FFFFFF; /* white - Popover background */
+    --color-popover-foreground: #0F172A; /* slate-900 - Popover text */
+    
+    /* Muted Colors */
+    --color-muted: #E2E8F0; /* slate-200 - Subtle separation */
+    --color-muted-foreground: #64748B; /* slate-500 - Supporting info */
+    
+    /* Border & Input */
+    --color-border: #E2E8F0; /* slate-200 - Subtle borders */
+    --color-input: #E2E8F0; /* slate-200 - Input borders */
+    --color-ring: #1E40AF; /* blue-800 - Focus rings */
+    
+    /* Status Colors */
+    --color-success: #10B981; /* emerald-500 - Positive outcomes */
+    --color-success-foreground: #FFFFFF; /* white - Success text */
+    --color-warning: #F59E0B; /* amber-500 - Attention needed */
+    --color-warning-foreground: #0F172A; /* slate-900 - Warning text */
+    --color-error: #EF4444; /* red-500 - System alerts */
+    --color-error-foreground: #FFFFFF; /* white - Error text */
+    --color-destructive: #EF4444; /* red-500 - Destructive actions */
+    --color-destructive-foreground: #FFFFFF; /* white - Destructive text */
+    
+    /* Typography */
+    --font-headline: 'Inter Display', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-accent: 'JetBrains Mono', monospace;
+    
+    /* Spacing */
+    --spacing-base: 8px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  .dark {
+    /* Primary Colors */
+    --color-primary: #3B82F6; /* blue-500 - Brighter for dark mode */
+    --color-primary-foreground: #FFFFFF; /* white - High contrast */
+    
+    /* Secondary Colors */
+    --color-secondary: #1E293B; /* slate-800 - Dark surface */
+    --color-secondary-foreground: #F8FAFC; /* slate-50 - Light text */
+    
+    /* Accent Colors */
+    --color-accent: #FBBF24; /* amber-400 - Brighter accent */
+    --color-accent-foreground: #0F172A; /* slate-900 - Dark contrast */
+    
+    /* Background Colors */
+    --color-background: #0A0A0A; /* Very dark background */
+    --color-foreground: #F8FAFC; /* slate-50 - Light text */
+    
+    /* Surface Colors */
+    --color-card: #1E293B; /* slate-800 - Dark card */
+    --color-card-foreground: #F8FAFC; /* slate-50 - Light text */
+    --color-popover: #1E293B; /* slate-800 - Dark popover */
+    --color-popover-foreground: #F8FAFC; /* slate-50 - Light text */
+    
+    /* Muted Colors */
+    --color-muted: #334155; /* slate-700 - Dark muted */
+    --color-muted-foreground: #94A3B8; /* slate-400 - Muted text */
+    
+    /* Border & Input */
+    --color-border: #334155; /* slate-700 - Dark borders */
+    --color-input: #334155; /* slate-700 - Input borders */
+    --color-ring: #3B82F6; /* blue-500 - Focus rings */
+    
+    /* Status Colors */
+    --color-success: #34D399; /* emerald-400 - Brighter success */
+    --color-success-foreground: #0F172A; /* slate-900 - Dark text */
+    --color-warning: #FBBF24; /* amber-400 - Brighter warning */
+    --color-warning-foreground: #0F172A; /* slate-900 - Dark text */
+    --color-error: #F87171; /* red-400 - Brighter error */
+    --color-error-foreground: #FFFFFF; /* white - Error text */
+    --color-destructive: #F87171; /* red-400 - Brighter destructive */
+    --color-destructive-foreground: #FFFFFF; /* white - Destructive text */
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headline);
+  }
+
+  code, pre {
+    font-family: var(--font-accent);
+  }
+}
+
+@layer components {
+  .sidebar-header {
+    @apply flex items-center justify-center h-16 px-4 border-b border-border bg-card;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+.sidebar-logo  {
+    @apply flex items-center justify-center w-10 h-10 rounded-lg;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-logo-text {
+    @apply ml-3 text-lg font-semibold text-foreground;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-collapsed .sidebar-logo {
+    @apply w-8 h-8;
+  }
+
+  .sidebar-collapsed .sidebar-logo-text {
+    @apply opacity-0 w-0 ml-0;
+  }
+
+  .nav-item {
+    @apply flex items-center px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-300;
+  }
+.nav-item.active  {
+    @apply text-primary;
+  }
+
+  .nav-item-icon {
+    @apply flex-shrink-0;
+  }
+
+  .nav-item-text {
+    @apply ml-3;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .sidebar-collapsed .nav-item-text {
+    @apply opacity-0 w-0 ml-0;
+  }
+
+  .mobile-menu-overlay {
+    @apply fixed inset-0 bg-background z-40;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .header-container {
+    @apply fixed top-0 left-0 right-0 h-16 bg-card border-b border-border z-30;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .header-content {
+    @apply flex items-center justify-between h-full px-6;
+  }
+
+  .header-logo {
+    @apply flex items-center;
+  }
+
+  .header-nav {
+    @apply hidden lg:flex items-center space-x-1;
+  }
+
+  .header-nav-item {
+    @apply px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-300;
+  }
+.header-nav-item.active  {
+    @apply text-primary;
+  }
+
+  .header-actions {
+    @apply flex items-center space-x-4;
+  }
+}
+
+@layer utilities {
+  .animation-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .animation-fast {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .shadow-elevation {
+    box-shadow: var(--shadow-md);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}

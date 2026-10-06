@@ -1,4 +1,4 @@
-# OmniChat — Omnichannel Customer Engagement Platform
+# OmniChat: Omnichannel Customer Engagement Platform
 
 Platform komunikasi omnichannel dengan AI Agent berbasis RAG: Command Center, AI knowledge base (upload PDF), dan integrasi Telegram / WhatsApp / Instagram / Messenger.
 
@@ -64,19 +64,19 @@ Di dalam Docker, backend memanggil AI via `http://backend-ai:8000` (sudah diatur
 Butuh Node 20, Python 3.11, dan env yang sama seperti di atas.
 
 ```bash
-# Terminal 1 — AI
+# Terminal 1: AI
 cd backend_ai
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 
-# Terminal 2 — Backend
+# Terminal 2: Backend
 cd backend
 npm install
 npm run db:generate
 npm run db:push
 npm run dev
 
-# Terminal 3 — Frontend
+# Terminal 3: Frontend
 cd frontend
 npm install
 npm start
@@ -105,4 +105,4 @@ omnichat/
 
 ## License
 
-MIT — OmniChat Team
+MIT License
